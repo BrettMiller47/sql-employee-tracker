@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const Employee = require('../../models/Employee');
 
-// Change the anonymous callback function to become Asynchronous
+// localhost/
 router.get('/', async (req, res) => {
   // Store the employeeData in a variable once the promise is resolved.
   const employeeData = await Employee.findAll();
