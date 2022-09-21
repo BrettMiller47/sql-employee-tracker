@@ -3,22 +3,39 @@ const sequelize = require('../config/connection');
 
 class Employee extends Model {}
 
+// Initialize the Employee table with specified columns
 Employee.init(
   {
     employee_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
+      allowNull: false
     },
-    name: {
-      type: DataTypes.STRING
+    first_name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    last_name: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
     role: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
     department: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
+    salary: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    manager: {
+      type: DataTypes.STRING,
+      allowNull: true
+    }
   },
   {
     sequelize,
