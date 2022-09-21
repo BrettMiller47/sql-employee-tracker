@@ -22,7 +22,7 @@ Employee.init(
     },
     role: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     department: {
       type: DataTypes.STRING,
