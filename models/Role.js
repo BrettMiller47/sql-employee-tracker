@@ -1,37 +1,31 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Employee extends Model {}
+class Role extends Model {}
 
-// Initialize the Employee table with specified columns
-Employee.init(
+// Initialize the Role table with specified columns
+Role.init(
   {
     id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       primaryKey: true,
       autoIncrement: true,
-      allowNull: false
     },
-    first_name: {
+    title: {
       type: DataTypes.STRING,
+      allowNull: true
+    },
+    salary: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    last_name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    role_id: {
+    department_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
       references: {
-        model: 'role',
-        key: 'id'
-      }
-    },
-    manager_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'employee',
+        model: 'department',
         key: 'id'
       }
     }
@@ -41,8 +35,8 @@ Employee.init(
     timestamps: false,
     freezeTableName: true,
     underscored: true,
-    modelName: 'employee'
+    modelName: 'role'
   }
 );
 
-module.exports = Employee;
+module.exports = Role;
