@@ -1,38 +1,27 @@
 const router = require('express').Router();
-const Employee = require('../../models/Employee');
+const Role = require('../../models/Role');
 
-// GET all roles from workforce-db.Employee 
+// GET all roles from workforce-db.Role 
 // localhost:3001/api/roles
 router.get('/', async (req, res) => {
-  const employeeData = await Employee.findAll({
-    where: {
-      role: req.body.role,
-    }
-  });
+  const roleData = await Role.findAll();
 
-  return res.json(employeeData);
+  return res.json(roleData);
 });
 
-// PUT existing employee's role to new value by primary key (employee_id) within workforce_db.Employee
-// localhost:3001/api/roles/:employee_id
-router.put('/:employee_id', async (req, res) => {
-  const employeeData = await Employee.update(
+// POST a new role to workforce_db.role
+// localhost:3001/api/roles
+router.post('/', async (req, res) => {
+  const roleData = await Role.create(
     {
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      role: req.body.role,
-      department: req.body.department,
+      title: req.body.title,
       salary: req.body.salary,
-      manager: req.body.manager,
+      department_id: req.body.department_id
     },
-    {
-      where: {
-        employee_id: req.params.employee_id,
-      },
-    }
   );
 
-  return res.json(employeeData);
+  return res.json(roleData);
 });
+
 
 module.exports = router;
