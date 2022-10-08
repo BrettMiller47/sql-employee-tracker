@@ -10,12 +10,12 @@ inquirer
       choices: ['View All Employees', 'Add Employee', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department'],
       name: 'menu'
     }
-  ]).then(async (choice)  => {
+  ]).then(async (choice) => {
+    console.log(choice);
     if (choice.menu == 'View All Employees') {
       // fetch all employees from workforce_db.Employee
       const response = await fetch("/api/employees", {
         method: "GET",
-        body: null
       });
 
     } else if (choice.menu == 'Add Employee') {
@@ -29,8 +29,7 @@ inquirer
     } else if (choice.menu == 'View All Roles') {
       // get the existing roles in workforce_db.Employee
       const jsonEmployees = await fetch('/api/employees', {
-        method: "GET",
-        body: null
+        method: "GET"
       });
       const jsonRoles = JSON.parse(jsonEmployees.role);
       console.log(jsonRoles);
@@ -56,8 +55,10 @@ inquirer
     
 
     } else if (choice.menu == 'View All Departments') {
-      // db.query('SELECT department FROM departments GROUP BY department;');      
-    
+      // fetch all employees from workforce_db.Employee
+      const response = await fetch("/api/departments", {
+        method: "GET"
+      });
 
     } else if (choice.menu == 'Add Department') {
       

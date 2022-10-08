@@ -1,4 +1,4 @@
-const { employeeTable } = require("../models");
+const { Employee } = require("../models");
 
 const employeeSeedData = [
   {
@@ -13,6 +13,6 @@ const employeeSeedData = [
   },
 ];
 
-const seedEmployeeTable = () => employeeTable.bulkCreate(employeeSeedData);
+const seedEmployeeTable = () => Employee.bulkCreate(employeeSeedData);
 
 module.exports = seedEmployeeTable;
