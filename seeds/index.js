@@ -1,10 +1,9 @@
 const sequelize = require("../config/connection.js");
-const { Employee, departmentTable, Role } = require("../models");
+const { Employee, Department, Role } = require("../models");
 
 const seedEmployeeTable = require("./employeeData.js");
 const seedDepartmentTable = require("./departmentData.js");
 const seedRoleTable = require("./roleData.js");
-const Department = require("../models/Department.js");
 
 require("dotenv").config();
 

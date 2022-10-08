@@ -1,4 +1,4 @@
-const { roleTable } = require("../models");
+const { Role } = require("../models");
 
 const roleSeedData = [
   {
@@ -13,6 +13,6 @@ const roleSeedData = [
   }
 ];
 
-const seedRoleTable = () => roleTable.bulkCreate(roleSeedData);
+const seedRoleTable = () => Role.bulkCreate(roleSeedData);
 
 module.exports = seedRoleTable;

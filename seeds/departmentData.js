@@ -1,4 +1,4 @@
-const { departmentTable } = require("../models");
+const { Department } = require("../models");
 
 const departmentSeedData = [
   {
@@ -9,6 +9,6 @@ const departmentSeedData = [
   },
 ];
 
-const seedDepartmentTable = () => departmentTable.bulkCreate(departmentSeedData);
+const seedDepartmentTable = () => Department.bulkCreate(departmentSeedData);
 
 module.exports = seedDepartmentTable;
