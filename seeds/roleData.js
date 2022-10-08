@@ -4,12 +4,12 @@ const roleSeedData = [
   {
     title: "OLP1",
     salary: 70000,
-    department: "Materials"
+    department_id: 2
   },
   {
     title: "OLP2",
     salary: 70000,
-    department: "DBS"
+    department_id: 1
   }
 ];
 

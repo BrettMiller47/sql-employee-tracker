@@ -4,12 +4,14 @@ const employeeSeedData = [
   {
     first_name: "Brett",
     last_name: "Miller",
-    manager_id: null
+    manager_id: null,
+    role_id: 1
   },
   {
     first_name: "John",
     last_name: "Furcick",
-    manager_id: 1
+    manager_id: 1,
+    role_id: 2
   },
 ];
 
