@@ -1,18 +1,8 @@
-const { json } = require('express');
 const inquirer = require('inquirer');
-const Employee = require('./models/Employee');
-const Db = require('./db');
-const sequelize = require('./config/connection');
+const connection = require('./config/connection');
 
-// ? how to deal with Heroku ? 
-// ? don't do fetch, what else?
-// ! replicate viewEmployees() for other actions then it is good
-
-async function viewEmployees() {
-  // TODO: fetch the data from the api endpoint (/api/employees)
-  db.findAllEmployees();
-  // console.log(employees)
-  // showMenu();
+function formatEmployees(arrOfJson) {
+  
 }
 
 function showMenu() {
@@ -28,7 +18,11 @@ function showMenu() {
       console.log(choice);
       if (choice.menu == 'View All Employees') {
         // fetch all employees from workforce_db.Employee
-        viewEmployees();
+        connection
+          .query("SELECT * FROM workforce_db.employee;")
+          // ! Fix this
+          .then((json) => console.table(json));
+        
 
       } else if (choice.menu == 'Add Employee') {
         // db.query(`INSERT INTO employee(id, name, etc.) VALUES(${id}, ${name}, etc.);`);
