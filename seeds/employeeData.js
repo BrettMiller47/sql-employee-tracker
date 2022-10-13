@@ -9,7 +9,7 @@ const employeeSeedData = [
   },
   {
     first_name: "John",
-    last_name: "Furcick",
+    last_name: "Smith",
     manager_id: 1,
     role_id: 2
   },

@@ -1,8 +1,22 @@
 const inquirer = require('inquirer');
 const connection = require('./config/connection');
 
-function formatEmployees(arrOfJson) {
-  
+async function viewAllEmployees() {
+  const employees = await connection.query("SELECT * FROM workforce_db.Employee;");
+  const data = await console.log(employees);
+  showMenu();
+}
+
+async function viewAllDepartments() {
+  const departments = await connection.query("SELECT * FROM workforce_db.Department;");
+  const data = await console.log(departments);
+  showMenu();
+}
+
+async function viewAllRoles() {
+  const roles = await connection.query("SELECT * FROM workforce_db.Role;");
+  const data = await console.log(roles);
+  showMenu();
 }
 
 function showMenu() {
@@ -17,54 +31,19 @@ function showMenu() {
     ]).then(async (choice) => {
       console.log(choice);
       if (choice.menu == 'View All Employees') {
-        // fetch all employees from workforce_db.Employee
-        connection
-          .query("SELECT * FROM workforce_db.employee;")
-          // ! Fix this
-          .then((json) => console.table(json));
+        viewAllEmployees();
         
-
       } else if (choice.menu == 'Add Employee') {
-        // db.query(`INSERT INTO employee(id, name, etc.) VALUES(${id}, ${name}, etc.);`);
-      
 
       } else if (choice.menu == 'Update Employee Role') {
-        // db.query(`;`);
-      
 
       } else if (choice.menu == 'View All Roles') {
-        // get the existing roles in workforce_db.Employee
-        const jsonEmployees = await fetch('/api/employees', {
-          method: "GET"
-        });
-        const jsonRoles = JSON.parse(jsonEmployees.role);
-        console.log(jsonRoles);
-        // prompt the user to choose an existing role to view
-        const role = await inquirer.prompt([
-          {
-            type: 'list',
-            message: 'Which role would you like to view?'
-          }
-        ]);
-        // fetch all roles from workforce_db.Employee
-        const response = await fetch("/api/employees", {
-          method: "GET",
-          body: {
-            role: choice.role
-          }
-        });
-
+        viewAllRoles();
+        
       } else if (choice.menu == 'Add Role') {
-        // inqurer.prompt([{type: 'input', message: 'Enter role', name: 'role'}]).then((answer) =>
-        //  db.query(`INSERT INTO roles(role) VALUES(${answer.role});`)
-        // )
-      
 
       } else if (choice.menu == 'View All Departments') {
-        // fetch all employees from workforce_db.Employee
-        const response = await fetch("/api/departments", {
-          method: "GET"
-        });
+        viewAllDepartments();
 
       } else if (choice.menu == 'Add Department') {
       }
