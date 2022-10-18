@@ -3,19 +3,19 @@ const connection = require('./config/connection');
 
 async function viewAllEmployees() {
   const employees = await connection.query("SELECT * FROM workforce_db.Employee;");
-  const data = await console.log(employees);
+  console.table(employees[0]);
   showMenu();
 }
 
 async function viewAllDepartments() {
   const departments = await connection.query("SELECT * FROM workforce_db.Department;");
-  const data = await console.log(departments);
+  console.table(departments[0]);
   showMenu();
 }
 
 async function viewAllRoles() {
   const roles = await connection.query("SELECT * FROM workforce_db.Role;");
-  const data = await console.log(roles);
+  console.table(roles[0]);
   showMenu();
 }
 
@@ -29,7 +29,6 @@ function showMenu() {
         name: 'menu'
       }
     ]).then(async (choice) => {
-      console.log(choice);
       if (choice.menu == 'View All Employees') {
         viewAllEmployees();
         
