@@ -20,8 +20,15 @@ async function viewAllRoles() {
   showMenu();
 }
 
-async function addDepartment(name) {
-  const department = await Department.create({name: name});
+async function addDepartment() {
+  const answers = await inquirer
+    .prompt([{
+      type: 'input',
+      message: 'Enter department name: ',
+      name: 'name'
+    }]).then((ans) => { return (ans) });
+  console.log(answers.name);
+  const department = await Department.create({name: answers.name});
   showMenu();
 }
 
@@ -51,11 +58,7 @@ function showMenu() {
         viewAllDepartments();
 
       } else if (choice.menu == 'Add Department') {
-        inquirer.prompt([{
-          type: 'input',
-          message: 'Enter department name: ',
-          name: 'name'
-        }]).then((ans) => addDepartment(ans.name));
+        addDepartment();
       }
     });
 }
