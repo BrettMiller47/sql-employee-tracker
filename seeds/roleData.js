@@ -2,12 +2,12 @@ const { Role } = require("../models");
 
 const roleSeedData = [
   {
-    title: "OLP1",
+    title: "Accountant",
     salary: 70000,
     department_id: 2
   },
   {
-    title: "OLP2",
+    title: "Sales Associate",
     salary: 70000,
     department_id: 1
   }

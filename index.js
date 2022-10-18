@@ -1,6 +1,8 @@
 const inquirer = require('inquirer');
 const connection = require('./config/connection');
 const Department = require('./models/Department');
+const Role = require('./models/Role');
+const Employee = require('./models/Employee');
 
 async function viewAllEmployees() {
   const employees = await connection.query("SELECT * FROM workforce_db.Employee;");
@@ -21,14 +23,36 @@ async function viewAllRoles() {
 }
 
 async function addDepartment() {
-  const answers = await inquirer
+  inquirer
     .prompt([{
       type: 'input',
       message: 'Enter department name: ',
       name: 'name'
-    }]).then((ans) => { return (ans) });
-  console.log(answers.name);
-  const department = await Department.create({name: answers.name});
+    }]).then((ans) => {
+      Department.create({ name: ans.name });
+    }).then(() => {
+      showMenu();
+    });  
+}
+
+async function addRole(title, salary, deptName) {  
+  
+  // Get the deptId [[object, Object],[object, Object]]
+  let deptId = await connection.query(`SELECT id FROM workforce_db.department WHERE name='${deptName}';`);
+  
+  // Get the stringified version of the desired id column result
+  let str = JSON.stringify(deptId[0]);
+  
+  // Match the numerical 'id' value (for department_id)
+  let regex = /\d/;
+  let matchedDeptID = str.match(regex);  
+
+  // Create the Role using the matchedId
+  Role.create({
+    title: title,
+    salary: salary,
+    department_id: matchedDeptID
+  })
   showMenu();
 }
 
@@ -53,7 +77,23 @@ function showMenu() {
         viewAllRoles();
         
       } else if (choice.menu == 'Add Role') {
-
+        inquirer
+          .prompt([{
+              type: 'input',
+              message: "Enter role's title: ",
+              name: 'title'
+            },
+            {
+              type: 'input',
+              message: "Enter role's salary: ",
+              name: 'salary'
+            },
+            {
+              type: "input",
+              message: "Enter the role's department:",
+              name: "dept",
+            }  
+          ]).then((ans)=>addRole(ans.title, ans.salary, ans.dept))
       } else if (choice.menu == 'View All Departments') {
         viewAllDepartments();
 
