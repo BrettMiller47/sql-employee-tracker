@@ -83,6 +83,10 @@ async function addEmployee(fName, lName, manager, role) {
   showMenu();
 }
 
+async function updateEmployeeFirstName() {
+  
+}
+
 function showMenu() {
   inquirer
     .prompt([
@@ -120,7 +124,8 @@ function showMenu() {
             }  
           ]).then((ans)=>addEmployee(ans.fName, ans.lName, ans.manager, ans.role))
       } else if (choice.menu == 'Update Employee Role') {
-
+        let employees = await connection.query("SELECT * FROM workforce_db.Employee;");
+        
       } else if (choice.menu == 'View All Roles') {
         viewAllRoles();
         
