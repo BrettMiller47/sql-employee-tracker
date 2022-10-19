@@ -31,6 +31,7 @@ async function addDepartment() {
     }]).then((ans) => {
       Department.create({ name: ans.name });
     }).then(() => {
+      console.log('Department added!')
       showMenu();
     });  
 }
@@ -44,8 +45,7 @@ async function addRole(title, salary, deptName) {
   let str = JSON.stringify(deptId[0]);
   
   // Match the numerical 'id' value (for department_id)
-  let regex = /\d/;
-  let matchedDeptID = str.match(regex);  
+  let matchedDeptID = str.match(/\d/);  
 
   // Create the Role using the matchedId
   Role.create({
@@ -53,6 +53,33 @@ async function addRole(title, salary, deptName) {
     salary: salary,
     department_id: matchedDeptID
   })
+  console.log('Role added!')
+  showMenu();
+}
+
+async function addEmployee(fName, lName, manager, role) {  
+  
+  // Get the manager ID
+  let splitMgr = manager.split(" ");
+  let mgrFName = splitMgr[0];
+  let mgrLName = splitMgr[1];
+  let managerId = await connection.query(`SELECT id FROM workforce_db.employee WHERE first_Name='${mgrFName}' AND last_Name='${mgrLName}';`);
+  let strMgr = JSON.stringify(managerId[0]);
+  let matchedMgrId = strMgr.match(/\d/);
+
+  // Get the role ID
+  let roleId = await connection.query(`SELECT id FROM workforce_db.role WHERE title='${role}'`);
+  let strRole = JSON.stringify(roleId[0]);
+  let matchedRoleId = strRole.match(/\d/);
+
+  // Create the Employee using the managerId & roleId
+  Employee.create({
+    first_name: fName,
+    last_name: lName,
+    manager_id: matchedMgrId,
+    role_id: matchedRoleId
+  })
+  console.log('Employee added!')
   showMenu();
 }
 
@@ -70,7 +97,28 @@ function showMenu() {
         viewAllEmployees();
         
       } else if (choice.menu == 'Add Employee') {
-
+        inquirer
+          .prompt([{
+              type: 'input',
+              message: "Enter employee's first name: ",
+              name: 'fName'
+            },
+            {
+              type: 'input',
+              message: "Enter employee's last name: ",
+              name: 'lName'
+            },
+            {
+              type: "input",
+              message: "Enter employee's manager:",
+              name: "manager",
+            },
+            {
+              type: "input",
+              message: "Enter employee's role:",
+              name: "role",
+            }  
+          ]).then((ans)=>addEmployee(ans.fName, ans.lName, ans.manager, ans.role))
       } else if (choice.menu == 'Update Employee Role') {
 
       } else if (choice.menu == 'View All Roles') {
