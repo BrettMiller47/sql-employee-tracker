@@ -83,10 +83,6 @@ async function addEmployee(fName, lName, manager, role) {
   showMenu();
 }
 
-async function updateEmployeeFirstName() {
-  
-}
-
 function showMenu() {
   inquirer
     .prompt([
