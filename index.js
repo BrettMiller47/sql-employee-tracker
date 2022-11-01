@@ -58,7 +58,29 @@ async function addRole(title, salary, deptName) {
 }
 
 async function printEmployeeRow(employeeId) {
-  // 
+  
+  // Get the employee's data joined with role and department (by their respective IDs)
+  let employeeData = await connection.query(`
+    SELECT * FROM Employee
+    INNER JOIN Role as EmployeesWithRoles
+    ON Employee.role_id = EmployeesWithRoles.id
+    INNER JOIN Department
+    ON EmployeesWithRoles.department_id = Department.id
+    WHERE Employee.id = ${employeeId};
+  `);
+
+  // Remove the id columns
+  delete employeeData[0][0].role_id;
+  delete employeeData[0][0].manager_id;
+  delete employeeData[0][0].department_id;
+
+  // Rename the key for department (currently set as 'name')
+  employeeData[0][0].department = employeeData[0][0].name;
+  delete employeeData[0][0].name;
+
+  // log the employee's info
+  console.log("\n\nThe updated employee's data is shown below.");
+  console.table(employeeData[0]);
 }
 
 async function addEmployee(fName, lName, manager, role) {  
