@@ -5,7 +5,7 @@ const departmentSeedData = [
     name: 'Finance'
   },
   {
-    name: 'Marketing'
+    name: 'Sales'
   },
 ];
 

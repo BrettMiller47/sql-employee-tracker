@@ -105,16 +105,16 @@ async function printEmployeeRow(employeeId) {
 
 async function addEmployee(fName, lName, manager, role) {  
   
+  // Get the role ID
+  let roleData = await connection.query(`SELECT id FROM Role WHERE title='${role}'`);
+  let roleId = roleData[0][0].id;
+  
   // Get the manager ID
   let splitMgr = manager.split(" ");
   let mgrFName = splitMgr[0];
   let mgrLName = splitMgr[1];
   let mgrData = await connection.query(`SELECT id FROM Employee WHERE first_Name='${mgrFName}' AND last_Name='${mgrLName}';`);
   let mgrId = mgrData[0][0].id;
-
-  // Get the role ID
-  let roleData = await connection.query(`SELECT id FROM Role WHERE title='${role}'`);
-  let roleId = roleData[0][0].id;
 
   // Create the Employee using the managerId & roleId
   await Employee.create({
@@ -135,7 +135,6 @@ async function addEmployee(fName, lName, manager, role) {
   let employeeId = employeeData[0][0].id;
 
   // Print the new employee
-  console.log('\n\nEmployee added! See details below:')
   await printEmployeeRow(employeeId);
 
   showMenu();
