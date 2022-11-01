@@ -52,8 +52,8 @@ async function addRole(title, salary, deptName) {
     title: title,
     salary: salary,
     department_id: matchedDeptID
-  })
-  console.log('Role added!')
+  });
+  console.log('Role added!');
   showMenu();
 }
 
@@ -63,24 +63,40 @@ async function addEmployee(fName, lName, manager, role) {
   let splitMgr = manager.split(" ");
   let mgrFName = splitMgr[0];
   let mgrLName = splitMgr[1];
-  let managerId = await connection.query(`SELECT id FROM Employee WHERE first_Name='${mgrFName}' AND last_Name='${mgrLName}';`);
-  let strMgr = JSON.stringify(managerId[0]);
-  let matchedMgrId = strMgr.match(/\d/);
+  let mgrData = await connection.query(`SELECT id FROM Employee WHERE first_Name='${mgrFName}' AND last_Name='${mgrLName}';`);
+  let mgrId = mgrData[0][0].id;
 
   // Get the role ID
-  let roleId = await connection.query(`SELECT id FROM Role WHERE title='${role}'`);
-  let strRole = JSON.stringify(roleId[0]);
-  let matchedRoleId = strRole.match(/\d/);
+  let roleData = await connection.query(`SELECT id FROM Role WHERE title='${role}'`);
+  let roleId = roleData[0][0].id;
 
   // Create the Employee using the managerId & roleId
   Employee.create({
     first_name: fName,
     last_name: lName,
-    manager_id: matchedMgrId,
-    role_id: matchedRoleId
+    manager_id: mgrId,
+    role_id: roleId
   })
   console.log('Employee added!')
   showMenu();
+}
+
+async function updateEmployeeRole(fName, lName, newRole) {
+  
+  // Get the employee's ID
+  // let employeeId = await connection.query(`SELECT id FROM Employee WHERE first_Name='${fName}' AND last_Name='${lName}';`);
+  
+  // showMenu()
+}
+
+async function getRolesList() {
+  // Get the list of roles
+  let roleObjects = await connection.query(`SELECT * FROM Role;`);
+  let roles = [];
+  for (let i = 0; i < roleObjects.length; i++) {
+    roles.push(roleObjects[0][i].title);
+  }
+  return roles;
 }
 
 function showMenu() {
@@ -99,28 +115,48 @@ function showMenu() {
       } else if (choice.menu == 'Add Employee') {
         inquirer
           .prompt([{
-              type: 'input',
-              message: "Enter employee's first name: ",
-              name: 'fName'
-            },
-            {
-              type: 'input',
-              message: "Enter employee's last name: ",
-              name: 'lName'
-            },
-            {
-              type: "input",
-              message: "Enter employee's manager:",
-              name: "manager",
-            },
-            {
-              type: "input",
-              message: "Enter employee's role:",
-              name: "role",
-            }  
-          ]).then((ans)=>addEmployee(ans.fName, ans.lName, ans.manager, ans.role))
+            type: 'input',
+            message: "Enter employee's first name: ",
+            name: 'fName'
+          },
+          {
+            type: 'input',
+            message: "Enter employee's last name: ",
+            name: 'lName'
+          },
+          {
+            type: "input",
+            message: "Enter employee's manager:",
+            name: "manager",
+          },
+          {
+            type: "input",
+            message: "Enter employee's role:",
+            name: "role",
+          }
+          ]).then((ans) => addEmployee(ans.fName, ans.lName, ans.manager, ans.role));
       } else if (choice.menu == 'Update Employee Role') {
-        let employees = await connection.query("SELECT * FROM Employee;");
+        getRolesList()
+          .then((roles) => {
+            inquirer
+              .prompt([{
+                type: 'input',
+                message: "Enter employee's first name: ",
+                name: 'fName'
+              },
+              {
+                type: 'input',
+                message: "Enter employee's last name: ",
+                name: 'lName'
+              },
+              {
+                type: "list",
+                message: "Select employee's new role:",
+                choices: roles,
+                name: "role",
+              }
+              ]).then((ans) => updateEmployeeRole(ans.fName, ans.lName, ans.role));
+              });
         
       } else if (choice.menu == 'View All Roles') {
         viewAllRoles();
