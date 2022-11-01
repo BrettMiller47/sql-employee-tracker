@@ -5,8 +5,13 @@ const Role = require('./models/Role');
 const Employee = require('./models/Employee');
 
 async function viewAllEmployees() {
-  const employees = await connection.query("SELECT * FROM Employee;");
+  
+  // Get employees
+  const employees = await connection.query(`SELECT * FROM Employee`);
+
+  // Print all employees
   console.table(employees[0]);
+  
   showMenu();
 }
 
