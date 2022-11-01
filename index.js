@@ -30,12 +30,13 @@ async function addDepartment(name) {
   let deptData = await connection.query(`SELECT * FROM Department WHERE name='${name}'`);
   console.log('\n\nDepartment added! See details below:')
   console.table(deptData[0]);
-  
+
   showMenu();
 }
 
 async function addRole(title, salary, deptName) {  
   
+  // -------- CREATE ROLE --------
   // Get the deptId [[object, Object],[object, Object]]
   let deptId = await connection.query(`SELECT id FROM Department WHERE name='${deptName}';`);
   
@@ -51,7 +52,28 @@ async function addRole(title, salary, deptName) {
     salary: salary,
     department_id: matchedDeptID
   });
-  console.log('Role added!');
+
+  // -------- PRINT ROLE --------
+  // Join the newly added role's info with its department info
+  let roleData = await connection.query(`
+    SELECT * FROM Role
+    INNER JOIN Department
+    ON Role.department_id = Department.id
+    WHERE title='${title}'
+    AND salary='${salary}'
+    AND department_id=${matchedDeptID}
+  `);
+
+  // Remove the ID field for department
+  delete roleData[0][0].department_id;
+  // Replace the department's 'name' field
+  roleData[0][0].department = roleData[0][0].name;
+  delete roleData[0][0].name;
+
+  // Print the newly added role
+  console.log('\n\nRole added! See details below:');
+  console.table(roleData[0]);
+
   showMenu();
 }
 
