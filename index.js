@@ -5,19 +5,19 @@ const Role = require('./models/Role');
 const Employee = require('./models/Employee');
 
 async function viewAllEmployees() {
-  const employees = await connection.query("SELECT * FROM workforce_db.Employee;");
+  const employees = await connection.query("SELECT * FROM Employee;");
   console.table(employees[0]);
   showMenu();
 }
 
 async function viewAllDepartments() {
-  const departments = await connection.query("SELECT * FROM workforce_db.Department;");
+  const departments = await connection.query("SELECT * FROM Department;");
   console.table(departments[0]);
   showMenu();
 }
 
 async function viewAllRoles() {
-  const roles = await connection.query("SELECT * FROM workforce_db.Role;");
+  const roles = await connection.query("SELECT * FROM Role;");
   console.table(roles[0]);
   showMenu();
 }
@@ -39,7 +39,7 @@ async function addDepartment() {
 async function addRole(title, salary, deptName) {  
   
   // Get the deptId [[object, Object],[object, Object]]
-  let deptId = await connection.query(`SELECT id FROM workforce_db.department WHERE name='${deptName}';`);
+  let deptId = await connection.query(`SELECT id FROM Department WHERE name='${deptName}';`);
   
   // Get the stringified version of the desired id column result
   let str = JSON.stringify(deptId[0]);
@@ -63,12 +63,12 @@ async function addEmployee(fName, lName, manager, role) {
   let splitMgr = manager.split(" ");
   let mgrFName = splitMgr[0];
   let mgrLName = splitMgr[1];
-  let managerId = await connection.query(`SELECT id FROM workforce_db.employee WHERE first_Name='${mgrFName}' AND last_Name='${mgrLName}';`);
+  let managerId = await connection.query(`SELECT id FROM Employee WHERE first_Name='${mgrFName}' AND last_Name='${mgrLName}';`);
   let strMgr = JSON.stringify(managerId[0]);
   let matchedMgrId = strMgr.match(/\d/);
 
   // Get the role ID
-  let roleId = await connection.query(`SELECT id FROM workforce_db.role WHERE title='${role}'`);
+  let roleId = await connection.query(`SELECT id FROM Role WHERE title='${role}'`);
   let strRole = JSON.stringify(roleId[0]);
   let matchedRoleId = strRole.match(/\d/);
 
@@ -120,7 +120,7 @@ function showMenu() {
             }  
           ]).then((ans)=>addEmployee(ans.fName, ans.lName, ans.manager, ans.role))
       } else if (choice.menu == 'Update Employee Role') {
-        let employees = await connection.query("SELECT * FROM workforce_db.Employee;");
+        let employees = await connection.query("SELECT * FROM Employee;");
         
       } else if (choice.menu == 'View All Roles') {
         viewAllRoles();
