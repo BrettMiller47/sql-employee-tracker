@@ -199,28 +199,33 @@ function showMenu() {
         viewAllEmployees();
         
       } else if (choice.menu == 'Add Employee') {
-        inquirer
-          .prompt([{
-            type: 'input',
-            message: "Enter employee's first name: ",
-            name: 'fName'
-          },
-          {
-            type: 'input',
-            message: "Enter employee's last name: ",
-            name: 'lName'
-          },
-          {
-            type: "input",
-            message: "Enter employee's manager:",
-            name: "manager",
-          },
-          {
-            type: "input",
-            message: "Enter employee's role:",
-            name: "role",
-          }
-          ]).then((ans) => addEmployee(ans.fName, ans.lName, ans.manager, ans.role));
+        getRolesList()
+          .then((roles) => {
+            inquirer
+              .prompt([{
+                type: 'input',
+                message: "Enter employee's first name: ",
+                name: 'fName'
+              },
+              {
+                type: 'input',
+                message: "Enter employee's last name: ",
+                name: 'lName'
+              },
+              {
+                type: "input",
+                message: "Enter employee's manager:",
+                name: "manager",
+              },
+              {
+                type: "list",
+                message: "Enter employee's role:",
+                choices: roles,
+                name: "role",
+              }
+              ]).then((ans) => addEmployee(ans.fName, ans.lName, ans.manager, ans.role));
+          });
+        
       } else if (choice.menu == 'Update Employee Role') {
         getRolesList()
           .then((roles) => {
