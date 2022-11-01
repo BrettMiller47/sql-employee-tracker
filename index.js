@@ -97,13 +97,27 @@ async function addEmployee(fName, lName, manager, role) {
   let roleId = roleData[0][0].id;
 
   // Create the Employee using the managerId & roleId
-  Employee.create({
+  await Employee.create({
     first_name: fName,
     last_name: lName,
     manager_id: mgrId,
     role_id: roleId
   })
-  console.log('Employee added!')
+
+  // Get the new employee's ID
+  let employeeData = await connection.query(`
+    SELECT id FROM Employee
+    WHERE first_name='${fName}'
+    AND last_name='${lName}'
+    AND manager_id=${mgrId}
+    AND role_id=${roleId}; 
+  `)
+  let employeeId = employeeData[0][0].id;
+
+  // Print the new employee
+  console.log('\n\nEmployee added! See details below:')
+  await printEmployeeRow(employeeId);
+
   showMenu();
 }
 
