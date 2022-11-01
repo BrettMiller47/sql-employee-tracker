@@ -38,19 +38,14 @@ async function addRole(title, salary, deptName) {
   
   // -------- CREATE ROLE --------
   // Get the deptId [[object, Object],[object, Object]]
-  let deptId = await connection.query(`SELECT id FROM Department WHERE name='${deptName}';`);
-  
-  // Get the stringified version of the desired id column result
-  let str = JSON.stringify(deptId[0]);
-  
-  // Match the numerical 'id' value (for department_id)
-  let matchedDeptID = str.match(/\d/);  
+  let deptData = await connection.query(`SELECT id FROM Department WHERE name='${deptName}';`);
+  let deptId = deptData[0][0].id
 
   // Create the Role using the matchedId
   await Role.create({
     title: title,
     salary: salary,
-    department_id: matchedDeptID
+    department_id: deptId
   });
 
   // -------- PRINT ROLE --------
@@ -61,7 +56,7 @@ async function addRole(title, salary, deptName) {
     ON Role.department_id = Department.id
     WHERE title='${title}'
     AND salary='${salary}'
-    AND department_id=${matchedDeptID}
+    AND department_id=${deptId}
   `);
 
   // Remove the ID field for department
@@ -180,6 +175,16 @@ async function getRolesList() {
   return roles;
 }
 
+async function getDepartmentList() {
+  // Get the list of roles
+  let deptObjects = await connection.query(`SELECT * FROM Department;`);
+  let departments = [];
+  for (let i = 0; i < deptObjects.length; i++) {
+    departments.push(deptObjects[0][i].name);
+  }
+  return departments;
+}
+
 function showMenu() {
   inquirer
     .prompt([
@@ -243,23 +248,28 @@ function showMenu() {
         viewAllRoles();
         
       } else if (choice.menu == 'Add Role') {
-        inquirer
-          .prompt([{
-              type: 'input',
-              message: "Enter role's title: ",
-              name: 'title'
-            },
-            {
-              type: 'input',
-              message: "Enter role's salary: ",
-              name: 'salary'
-            },
-            {
-              type: "input",
-              message: "Enter the role's department:",
-              name: "dept",
-            }  
-          ]).then((ans)=>addRole(ans.title, ans.salary, ans.dept))
+        getDepartmentList()
+          .then((departments) => {
+            inquirer
+              .prompt([{
+                type: 'input',
+                message: "Enter role's title: ",
+                name: 'title'
+              },
+              {
+                type: 'input',
+                message: "Enter role's salary: ",
+                name: 'salary'
+              },
+              {
+                type: "list",
+                message: "Enter the role's department:",
+                choices: departments,
+                name: "dept",
+              }
+              ]).then((ans) => addRole(ans.title, ans.salary, ans.dept))
+          });
+    
       } else if (choice.menu == 'View All Departments') {
         viewAllDepartments();
 
