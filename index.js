@@ -84,9 +84,21 @@ async function addEmployee(fName, lName, manager, role) {
 async function updateEmployeeRole(fName, lName, newRole) {
   
   // Get the employee's ID
-  // let employeeId = await connection.query(`SELECT id FROM Employee WHERE first_Name='${fName}' AND last_Name='${lName}';`);
-  
-  // showMenu()
+  let employeeData = await connection.query(`SELECT id FROM Employee WHERE first_Name='${fName}' AND last_Name='${lName}';`);
+  let employeeId = employeeData[0][0].id;
+
+  // Get the new role's ID
+  let newRoleData = await connection.query(`SELECT * FROM Role WHERE title='${newRole}'`);
+  let newRoleId = newRoleData[0][0].id;
+
+  // Update the employee's role
+  await connection.query(`
+    UPDATE Employee
+    SET role_id = ${newRoleId}
+    WHERE id='${employeeId}';
+  `)
+
+  showMenu()
 }
 
 async function getRolesList() {
