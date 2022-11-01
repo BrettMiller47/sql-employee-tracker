@@ -174,17 +174,17 @@ async function getRolesList() {
   // Get the list of roles
   let roleObjects = await connection.query(`SELECT * FROM Role;`);
   let roles = [];
-  for (let i = 0; i < roleObjects.length; i++) {
+  for (let i = 0; i < roleObjects[0].length; i++) {
     roles.push(roleObjects[0][i].title);
   }
   return roles;
 }
 
-async function getDepartmentList() {
+async function getDepartmentsList() {
   // Get the list of roles
   let deptObjects = await connection.query(`SELECT * FROM Department;`);
   let departments = [];
-  for (let i = 0; i < deptObjects.length; i++) {
+  for (let i = 0; i < deptObjects[0].length; i++) {
     departments.push(deptObjects[0][i].name);
   }
   return departments;
@@ -258,7 +258,7 @@ function showMenu() {
         viewAllRoles();
         
       } else if (choice.menu == 'Add Role') {
-        getDepartmentList()
+        getDepartmentsList()
           .then((departments) => {
             inquirer
               .prompt([{
