@@ -22,18 +22,16 @@ async function viewAllRoles() {
   showMenu();
 }
 
-async function addDepartment() {
-  inquirer
-    .prompt([{
-      type: 'input',
-      message: 'Enter department name: ',
-      name: 'name'
-    }]).then((ans) => {
-      Department.create({ name: ans.name });
-    }).then(() => {
-      console.log('Department added!')
-      showMenu();
-    });  
+async function addDepartment(name) {
+
+  await Department.create({ name: name });
+
+  // Print the newly added department
+  let deptData = await connection.query(`SELECT * FROM Department WHERE name='${name}'`);
+  console.log('\n\nDepartment added! See details below:')
+  console.table(deptData[0]);
+  
+  showMenu();
 }
 
 async function addRole(title, salary, deptName) {  
@@ -48,7 +46,7 @@ async function addRole(title, salary, deptName) {
   let matchedDeptID = str.match(/\d/);  
 
   // Create the Role using the matchedId
-  Role.create({
+  await Role.create({
     title: title,
     salary: salary,
     department_id: matchedDeptID
@@ -244,7 +242,14 @@ function showMenu() {
         viewAllDepartments();
 
       } else if (choice.menu == 'Add Department') {
-        addDepartment();
+        inquirer
+          .prompt([{
+            type: 'input',
+            message: 'Enter department name: ',
+            name: 'name'
+          }]).then((ans) => {
+            addDepartment(ans.name);
+          });
       }
     });
 }
