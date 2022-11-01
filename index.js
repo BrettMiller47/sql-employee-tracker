@@ -131,8 +131,9 @@ async function updateEmployeeRole(fName, lName, newRole) {
   `)
 
   // Cleanly print the updated employee's new info
+  await printEmployeeRow(employeeId);
 
-  showMenu()
+  showMenu();
 }
 
 async function getRolesList() {
