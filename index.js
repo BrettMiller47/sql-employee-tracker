@@ -57,6 +57,10 @@ async function addRole(title, salary, deptName) {
   showMenu();
 }
 
+async function printEmployeeRow(employeeId) {
+  // 
+}
+
 async function addEmployee(fName, lName, manager, role) {  
   
   // Get the manager ID
@@ -84,7 +88,13 @@ async function addEmployee(fName, lName, manager, role) {
 async function updateEmployeeRole(fName, lName, newRole) {
   
   // Get the employee's ID
-  let employeeData = await connection.query(`SELECT id FROM Employee WHERE first_Name='${fName}' AND last_Name='${lName}';`);
+  try {
+    var employeeData = await connection.query(`SELECT id FROM Employee WHERE first_Name='${fName}' AND last_Name='${lName}';`);
+  } catch {
+    console.log('ERROR: employee does not exist.');
+    console.log('Please restart the application and select "View all Employees" to ensure proper spelling.');
+    return 1;
+  }
   let employeeId = employeeData[0][0].id;
 
   // Get the new role's ID
@@ -97,6 +107,8 @@ async function updateEmployeeRole(fName, lName, newRole) {
     SET role_id = ${newRoleId}
     WHERE id='${employeeId}';
   `)
+
+  // Cleanly print the updated employee's new info
 
   showMenu()
 }
